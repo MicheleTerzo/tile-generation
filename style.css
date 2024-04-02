@@ -15,17 +15,19 @@ body {
 }
 
 .tiles-container {
-  /* border    : 1px solid red; */
-  width     : 960px;
-  height    : 960px;
-  display   : flex;
-  flex-wrap : wrap;
+  border-width : 3px;
+  border-color : #560808;
+  border-style : ridge;
+  width        : 960px;
+  height       : 960px;
+  display      : flex;
+  flex-wrap    : wrap;
 }
 
 .tile {
   height          : calc(100% / 48);
   width           : calc(100% / 48);
-  border          : 1px solid green;
+  border          : 1px solid rgba(0, 0, 0, 0.1);
   display         : flex;
   justify-content : center;
   align-items     : center;
@@ -37,7 +39,7 @@ body {
   cursor        : pointer;
   border        : 1px solid red;
   background    : #1F1F1F;
-  border-radius : .5rem;
+  border-radius : .1rem;
 }
 
 .mountain {
@@ -50,6 +52,10 @@ body {
 
 .plain {
   background-color : #1E9121;
+}
+
+.beach {
+  background-color : #725F0D;
 }
 
 .sea {

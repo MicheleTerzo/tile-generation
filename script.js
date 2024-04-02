@@ -1,6 +1,6 @@
 const tileContainerElement = document.querySelector('.tiles-container');
 const maxTilesPerRow = 48;
-const cellTypes = ['mountain', 'hill', 'plain', 'sea'];
+const cellTypes = ['mountain', 'hill', 'plain', 'beach', 'sea'];
 let tiles;
 
 function createHtmlElement(x, y) {
@@ -12,60 +12,55 @@ function createHtmlElement(x, y) {
   return tileElement;
 }
 
-function generateRandomType() {
-  const x = Math.random();
-  if (x < 0.3) {
-    return cellTypes[0];
-  }
-  else if (x < 0.8) {
-    return cellTypes[1];
-  }
-  else if (x < 0.95) {
-    return cellTypes[2];
-  }
-  else {
-    return cellTypes[3];
-  }
+function randomIntFromInterval(min, max) { // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function equalSplit(firstType, secondType) {
-  return Math.random() < 0.5 ? firstType : secondType;
-}
-
-const terrainTransitions = {
-  'mountain': {
-    'mountain': ['hill', 'mountain'], 'hill': ['hill', 'mountain'], 'plain': ['hill', 'plain'], 'sea': ['plain', 'sea']
-  }, 'hill': {
-    'mountain': ['hill', 'mountain'], 'hill': ['hill', 'plain'], 'plain': ['hill', 'plain'], 'sea': ['plain', 'sea']
-  }, 'plain': {
-    'mountain': ['hill', 'plain'], 'hill': ['hill', 'mountain'], 'plain': ['plain', 'sea'], 'sea': ['plain', 'sea']
-  }, 'sea': {
-    'mountain': ['plain', 'sea'], 'hill': ['hill', 'mountain'], 'plain': ['hill', 'plain'], 'sea': ['hill', 'plain']
+function drawBeach(tile, x, y) {
+  const beachBoundaryMin = randomIntFromInterval(0, 2);
+  const beachBoundaryMax = randomIntFromInterval(47, 48);
+  if ((y > beachBoundaryMin && x > beachBoundaryMin) && (x < beachBoundaryMax && y < beachBoundaryMax)) {
+    tile.cellType = cellTypes[3];
   }
-};
-
-function getTerrainType(previous, top) {
-  const types = terrainTransitions[previous ?? top][top ?? previous];
-  return types ? equalSplit(...types) : previous;
+  return tile;
 }
 
-function findAdjacent(x, y) {
-  const top = y > 0 ? tiles[y - 1][x] : null;
-  const left = x > 0 ? tiles[y][x - 1] : null;
-  return {top, left};
+function drawPlain(tile, x, y) {
+  const plainBoundaryMin = randomIntFromInterval(2, 8);
+  const plainBoundaryMax = randomIntFromInterval(45, 47);
+  if ((y > plainBoundaryMin && x > plainBoundaryMin) && (x < plainBoundaryMax && y < plainBoundaryMax)) {
+    tile.cellType = cellTypes[2];
+  }
+  return tile;
 }
 
-function generateTerrain() {
+function drawHills(tile, x, y) {
+  const hillsBoundaryMin = randomIntFromInterval(8, 12);
+  const hillsBoundaryMax = randomIntFromInterval(38, 45);
+  if ((y > hillsBoundaryMin && x > hillsBoundaryMin) && (x < hillsBoundaryMax && y < hillsBoundaryMax)) {
+    tile.cellType = cellTypes[1];
+  }
+  return tile;
+}
+
+function drawMountains(tile, x, y) {
+  const mountainBoundaryMin = randomIntFromInterval(12, 20);
+  const mountainBoundaryMax = randomIntFromInterval(29, 38);
+  if ((y > mountainBoundaryMin && x > mountainBoundaryMin) && (x < mountainBoundaryMax && y < mountainBoundaryMax)) {
+    tile.cellType = cellTypes[0];
+  }
+  return tile;
+}
+
+function drawMap() {
   for (let y = 0; y < tiles.length; y++) {
     for (let x = 0; x < tiles[y].length; x++) {
-      const tile = tiles[y][x];
-      const {top, left} = findAdjacent(x, y);
-      if (!left && !top) {
-        tile.cellType = generateRandomType();
-      }
-      else {
-        tile.cellType = getTerrainType(left?.cellType, top?.cellType);
-      }
+      let tile = tiles[y][x];
+      tile.cellType = cellTypes[4];
+      tile = drawBeach(tile, x, y);
+      tile = drawPlain(tile, x, y);
+      tile = drawHills(tile, x, y);
+      tile = drawMountains(tile, x, y);
       requestAnimationFrame(() => {
         tile.htmlElement.dataset.cellType = tile.cellType;
         tile.htmlElement.classList.add(tile.cellType);
@@ -88,4 +83,5 @@ function generateGrid() {
 }
 
 generateGrid();
-generateTerrain();
+// generateTerrain();
+drawMap();
