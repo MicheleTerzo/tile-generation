@@ -29,98 +29,24 @@ function generateRandomType() {
 }
 
 function equalSplit(firstType, secondType) {
-  const x = Math.random();
-  if (x < 0.5) {
-    return firstType;
-  }
-  return secondType;
+  return Math.random() < 0.5 ? firstType : secondType;
 }
 
-function getTerrainType(previous, top) {
-  let cellType;
-  switch (previous) {
-    case 'mountain': {
-      switch (top) {
-        case 'mountain':
-          cellType = equalSplit('hill', 'mountain');
-          break;
-        case 'hill':
-          cellType = equalSplit('hill', 'mountain');
-          break;
-        case 'plain':
-          cellType = equalSplit('hill', 'plain');
-          break;
-        case 'sea':
-          cellType = equalSplit('plain', 'sea');
-          break;
-        default:
-          cellType = previous;
-          break;
-      }
-      break;
-    }
-    case 'hill':
-      switch (top) {
-        case 'mountain':
-          cellType = equalSplit('hill', 'mountain');
-          break;
-        case 'hill':
-          cellType = equalSplit('hill', 'plain');
-          break;
-        case 'plain':
-          cellType = equalSplit('hill', 'plain');
-          break;
-        case 'sea':
-          cellType = equalSplit('plain', 'sea');
-          break;
-        default:
-          cellType = previous;
-          break;
-      }
-      break;
-    case 'plain':
-      switch (top) {
-        case 'mountain':
-          cellType = equalSplit('hill', 'plain');
-          break;
-        case 'hill':
-          cellType = equalSplit('hill', 'mountain');
-          break;
-        case 'plain':
-          cellType = equalSplit('plain', 'sea');
-          break;
-        case 'sea':
-          cellType = equalSplit('plain', 'sea');
-          break;
-        default:
-          cellType = previous;
-          break;
-      }
-      break;
-    case 'sea':
-      switch (top) {
-        case 'mountain':
-          cellType = equalSplit('plain', 'sea');
-          break;
-        case 'hill':
-          cellType = equalSplit('hill', 'mountain');
-          break;
-        case 'plain':
-          cellType = equalSplit('hill', 'plain');
-          break;
-        case 'sea':
-          cellType = equalSplit('hill', 'plain');
-          break;
-        default:
-          cellType = previous;
-          break;
-      }
-      break;
-    default:
-      cellType = top;
-      break;
+const terrainTransitions = {
+  'mountain': {
+    'mountain': ['hill', 'mountain'], 'hill': ['hill', 'mountain'], 'plain': ['hill', 'plain'], 'sea': ['plain', 'sea']
+  }, 'hill': {
+    'mountain': ['hill', 'mountain'], 'hill': ['hill', 'plain'], 'plain': ['hill', 'plain'], 'sea': ['plain', 'sea']
+  }, 'plain': {
+    'mountain': ['hill', 'plain'], 'hill': ['hill', 'mountain'], 'plain': ['plain', 'sea'], 'sea': ['plain', 'sea']
+  }, 'sea': {
+    'mountain': ['plain', 'sea'], 'hill': ['hill', 'mountain'], 'plain': ['hill', 'plain'], 'sea': ['hill', 'plain']
   }
-  return cellType;
+};
+
+function getTerrainType(previous, top) {
+  const types = terrainTransitions[previous ?? top][top ?? previous];
+  return types ? equalSplit(...types) : previous;
 }
 
 function findAdjacent(x, y) {
