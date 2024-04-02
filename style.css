@@ -1,0 +1,58 @@
+* {
+  box-sizing : border-box;
+  margin     : 0;
+  padding    : 0;
+}
+
+body {
+  width           : 100%;
+  height          : 100%;
+  display         : flex;
+  justify-content : center;
+  align-items     : center;
+  background      : #1F1F1F;
+  color           : #FFF;
+}
+
+.tiles-container {
+  /* border    : 1px solid red; */
+  width     : 960px;
+  height    : 960px;
+  display   : flex;
+  flex-wrap : wrap;
+}
+
+.tile {
+  height          : calc(100% / 48);
+  width           : calc(100% / 48);
+  border          : 1px solid green;
+  display         : flex;
+  justify-content : center;
+  align-items     : center;
+  font-size       : 10px;
+}
+
+.tile:hover {
+  scale         : 120%;
+  cursor        : pointer;
+  border        : 1px solid red;
+  background    : #1F1F1F;
+  border-radius : .5rem;
+}
+
+.mountain {
+  background-color : #595959;
+}
+
+.hill {
+  background-color : #074E09;
+}
+
+.plain {
+  background-color : #1E9121;
+}
+
+.sea {
+  background-color : #2184A7;
+}
+
