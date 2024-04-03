@@ -18,8 +18,8 @@ body {
   border-width : 3px;
   border-color : #560808;
   border-style : ridge;
-  width        : 960px;
-  height       : 960px;
+  width        : 1200px;
+  height       : 1200px;
   display      : flex;
   flex-wrap    : wrap;
 }
@@ -35,7 +35,7 @@ body {
 }
 
 .tile:hover {
-  scale         : 120%;
+  scale         : 200%;
   cursor        : pointer;
   border        : 1px solid red;
   background    : #1F1F1F;
